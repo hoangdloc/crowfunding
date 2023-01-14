@@ -4,6 +4,10 @@
 
 @layer base {
   body {
-    @apply font-body;
+    @apply font-primary text-base font-normal;
+    line-height: 1.5;
+  }
+  input {
+    @apply outline-none;
   }
 }
