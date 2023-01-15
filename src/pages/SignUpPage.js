@@ -1,28 +1,44 @@
-import React, { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import * as yup from 'yup';
 
-import Button from '../components/button';
+import { Button, ButtonGoogle } from '../components/button';
 import Checkbox from '../components/checkbox/Checkbox';
 import FormGroup from '../components/common/FormGroup';
+import { IconEyeToggle } from '../components/icons';
 import Input from '../components/input';
 import Label from '../components/label';
+import useToggleValue from '../hooks/useToggleValue';
 import LayoutAuthentication from '../layouts/LayoutAuthentication';
+
+const schema = yup.object({
+  name: yup.string().required('This field is required!'),
+  email: yup.string().email('').required('This field is required!'),
+  password: yup
+    .string()
+    .required('This field is required')
+    .min(8, 'Password must be 8 characters')
+});
 
 const SignUpPage = () => {
   const {
     handleSubmit,
     control,
-    formState: { isValid, isSubmitting }
-  } = useForm({});
-  const [acceptTerm, setAcceptTerm] = useState(false);
+    formState: { isValid, isSubmitting, errors }
+  } = useForm({
+    mode: 'onSubmit',
+    resolver: yupResolver(schema)
+  });
+  const { value: acceptTerm, handleToggleValue: handleToggleTerm } =
+    useToggleValue();
+  const { value: showPassword, handleToggleValue: handleShowPassword } =
+    useToggleValue();
 
   const handleSignUp = (values) => {
+    if (!isValid) return;
     console.log(values);
-  };
-
-  const handleToggleTerm = () => {
-    setAcceptTerm(!acceptTerm);
   };
 
   return (
@@ -36,14 +52,8 @@ const SignUpPage = () => {
           Sign in
         </Link>
       </p>
-      <button className="flex items-center justify-center w-full py-4 mb-5 text-base font-semibold border gap-x-3 border-strock rounded-xl text-text2">
-        <img
-          srcSet="/icon/google.png 2x"
-          alt="icon-google"
-        />
-        <span>Sign up with google</span>
-      </button>
-      <p className="mb-4 text-xs font-normal text-center lg:text-sm lg:mb-8 text-text2">
+      <ButtonGoogle />
+      <p className="mb-4 text-xs font-normal text-center lg:text-sm lg:mb-8 text-text2 dark:text-white">
         Or sign up with email
       </p>
       <form onSubmit={handleSubmit(handleSignUp)}>
@@ -53,6 +63,7 @@ const SignUpPage = () => {
             control={control}
             name="name"
             placeholder="John Doe"
+            error={errors.name?.message}
           />
         </FormGroup>
         <FormGroup>
@@ -61,7 +72,8 @@ const SignUpPage = () => {
             control={control}
             name="email"
             type="email"
-            placeholder="john@example.io"
+            placeholder="example@gmail.com"
+            error={errors.email?.message}
           />
         </FormGroup>
         <FormGroup>
@@ -69,9 +81,15 @@ const SignUpPage = () => {
           <Input
             control={control}
             name="password"
-            type="password"
+            type={`${showPassword ? 'text' : 'password'}`}
             placeholder="Create a password"
-          />
+            error={errors.password?.message}
+          >
+            <IconEyeToggle
+              open={showPassword}
+              onClick={handleShowPassword}
+            />
+          </Input>
         </FormGroup>
         <div className="mb-5">
           <Checkbox
@@ -79,7 +97,7 @@ const SignUpPage = () => {
             checked={acceptTerm}
             onClick={handleToggleTerm}
           >
-            <p className="flex-1 text-sm text-text2">
+            <p className="flex-1 text-xs lg:text-sm text-text2 dark:text-text3">
               I agree to the{' '}
               <span className="underline cursor-pointer text-secondary">
                 Terms of Use

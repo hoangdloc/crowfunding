@@ -1,5 +1,7 @@
 import React from 'react';
 
+import classNames from '../../utils/classNames';
+
 const Checkbox = ({
   checked = false,
   onClick = () => {},
@@ -9,9 +11,12 @@ const Checkbox = ({
   return (
     <div className="flex items-start gap-x-5">
       <div
-        className={`inline-flex items-center justify-center text-white w-5 h-5 border rounded cursor-pointer ${
-          checked ? 'bg-primary border-primary' : 'border-strock'
-        }`}
+        className={classNames(
+          'inline-flex items-center justify-center text-white w-5 h-5 border rounded cursor-pointer',
+          checked
+            ? 'bg-primary border-primary'
+            : 'border-strock dark:border-text3'
+        )}
         onClick={onClick}
       >
         <input
@@ -21,7 +26,7 @@ const Checkbox = ({
           name={name}
           onChange={() => {}}
         />
-        <span>
+        <span className={classNames(checked ? null : 'opacity-0 invisible')}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
