@@ -10,7 +10,7 @@ const LayoutDashboard = ({ children }) => {
       <DashboardTopbar />
       <div className="flex items-start gap-x-10">
         <DashboardSidebar />
-        <div>{children}</div>
+        <div className="flex-1">{children}</div>
       </div>
     </div>
   );
