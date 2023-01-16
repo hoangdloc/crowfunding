@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 
 const SignUpPage = lazy(async () => await import('./pages/SignUpPage'));
 const SignInPage = lazy(async () => await import('./pages/SignInPage'));
+const DashboardPage = lazy(async () => await import('./pages/DashboardPage'));
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<></>}
+          element={<DashboardPage />}
         />
         <Route
           path="/sign-up"

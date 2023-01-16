@@ -27,6 +27,9 @@ module.exports = {
         'dark-soft': '#24242C',
         'dark-stroke': '#3A3A43',
         'dark-red': '#422C32'
+      },
+      boxShadow: {
+        'sd-primary': '10px 10px 20px rgba(211, 211, 211, 0.25)'
       }
     }
   },
