@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 const SignUpPage = lazy(async () => await import('./pages/SignUpPage'));
 const SignInPage = lazy(async () => await import('./pages/SignInPage'));
 const DashboardPage = lazy(async () => await import('./pages/DashboardPage'));
+const CampaignPage = lazy(async () => await import('./pages/CampaignPage'));
 
 function App() {
   return (
@@ -12,6 +13,10 @@ function App() {
         <Route
           path="/"
           element={<DashboardPage />}
+        />
+        <Route
+          path="/campaign"
+          element={<CampaignPage />}
         />
         <Route
           path="/sign-up"
