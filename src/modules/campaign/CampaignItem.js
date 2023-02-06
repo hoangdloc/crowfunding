@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import CampAuthor from './parts/CampAuthor';
 import CampCategory from './parts/CampCategory';
