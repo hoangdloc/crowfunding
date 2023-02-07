@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { Button, ButtonGoogle } from '../components/button';
 import FormGroup from '../components/common/FormGroup';
 import { IconEyeToggle } from '../components/icons';
-import Input from '../components/input';
+import { Input } from '../components/input';
 import Label from '../components/label';
 import useToggleValue from '../hooks/useToggleValue';
 import LayoutAuthentication from '../layouts/LayoutAuthentication';

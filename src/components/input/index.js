@@ -1,1 +1,4 @@
-export { default } from './Input';
+import Input from './Input';
+import Textarea from './Textarea';
+
+export { Input, Textarea };
