@@ -5,6 +5,9 @@ const SignUpPage = lazy(async () => await import('./pages/SignUpPage'));
 const SignInPage = lazy(async () => await import('./pages/SignInPage'));
 const DashboardPage = lazy(async () => await import('./pages/DashboardPage'));
 const CampaignPage = lazy(async () => await import('./pages/CampaignPage'));
+const StartCampaignPage = lazy(
+  async () => await import('./pages/StartCampaignPage')
+);
 
 function App() {
   return (
@@ -17,6 +20,10 @@ function App() {
         <Route
           path="/campaign"
           element={<CampaignPage />}
+        />
+        <Route
+          path="/start-campaign"
+          element={<StartCampaignPage />}
         />
         <Route
           path="/sign-up"

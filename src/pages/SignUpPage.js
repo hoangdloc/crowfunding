@@ -8,7 +8,7 @@ import { Button, ButtonGoogle } from '../components/button';
 import Checkbox from '../components/checkbox/Checkbox';
 import FormGroup from '../components/common/FormGroup';
 import { IconEyeToggle } from '../components/icons';
-import Input from '../components/input';
+import { Input } from '../components/input';
 import Label from '../components/label';
 import useToggleValue from '../hooks/useToggleValue';
 import LayoutAuthentication from '../layouts/LayoutAuthentication';
@@ -111,7 +111,8 @@ const SignUpPage = () => {
         </div>
         <Button
           type="submit"
-          className="w-full bg-primary"
+          className="w-full"
+          kind="primary"
         >
           Create my account
         </Button>
