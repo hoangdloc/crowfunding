@@ -1,5 +1,8 @@
 import React, { lazy, Suspense } from 'react';
+import Modal from 'react-modal';
 import { Route, Routes } from 'react-router-dom';
+
+Modal.setAppElement('#root');
 
 const SignUpPage = lazy(async () => await import('./pages/SignUpPage'));
 const SignInPage = lazy(async () => await import('./pages/SignInPage'));

@@ -39,7 +39,29 @@ input:focus + .error-input {
   }
 }
 
+.gradient-banner {
+  background-image: linear-gradient(
+      179.14deg,
+      rgba(32, 18, 63, 0) -7.14%,
+      #000000 87.01%
+    ),
+    url(https://source.unsplash.com/random);
+}
+
 .shadow-1 {
   box-shadow: -4px 4px 8px rgba(226, 226, 226, 0.2),
     4px 4px 8px rgba(226, 226, 226, 0.2);
+}
+
+.ReactModal__Body--open {
+  overflow: hidden;
+}
+
+.scroll-hidden {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
