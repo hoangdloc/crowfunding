@@ -17,6 +17,11 @@ const StartCampaignPage = lazy(
 const CampaignView = lazy(
   async () => await import('./modules/campaign/CampaignView')
 );
+const LayoutPayment = lazy(async () => await import('./layouts/LayoutPayment'));
+const CheckoutPage = lazy(async () => await import('./pages/CheckoutPage'));
+const ShippingPage = lazy(async () => await import('./pages/ShippingPage'));
+const WithdrawPage = lazy(async () => await import('./pages/WithdrawPage'));
+const PaymentPage = lazy(async () => await import('./pages/PaymentPage'));
 
 function App() {
   return (
@@ -39,6 +44,24 @@ function App() {
             path="/campaign/:slug"
             element={<CampaignView />}
           />
+          <Route
+            path="/withdraw"
+            element={<WithdrawPage />}
+          />
+          <Route
+            path="/payment"
+            element={<PaymentPage />}
+          />
+        </Route>
+        <Route element={<LayoutPayment />}>
+          <Route
+            path="/checkout"
+            element={<CheckoutPage />}
+          ></Route>
+          <Route
+            path="/shipping-address"
+            element={<ShippingPage />}
+          ></Route>
         </Route>
         <Route
           path="/sign-up"
