@@ -65,3 +65,20 @@ input:focus + .error-input {
     display: none;
   }
 }
+
+// Custom datepicker
+body {
+  .react-datepicker__input-container {
+    @apply w-full px-6 py-4 text-sm font-medium border rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white bg-transparent border-strock text-text1 dark:border-dark-stroke;
+
+    .react-datepicker__close-icon::after {
+      @apply bg-primary;
+    }
+  }
+  .react-datepicker__day--selected {
+    @apply bg-primary bg-opacity-80;
+    &:hover {
+      @apply bg-primary;
+    }
+  }
+}

@@ -1,9 +1,11 @@
+import 'react-datepicker/dist/react-datepicker.css';
 import 'react-quill/dist/quill.snow.css';
 
 import axios from 'axios';
 import ImageUploader from 'quill-image-uploader';
 import React, { useEffect, useMemo } from 'react';
 import { useState } from 'react';
+import DatePicker from 'react-datepicker';
 import { useForm } from 'react-hook-form';
 import ReactQuill, { Quill } from 'react-quill';
 import { toast } from 'react-toastify';
@@ -13,17 +15,33 @@ import { Button } from '../../components/button';
 import FormGroup from '../../components/common/FormGroup';
 import FormRow from '../../components/common/FormRow';
 import { Dropdown } from '../../components/dropdown';
+import ImageUpload from '../../components/image/ImageUpload';
 import { Input, Textarea } from '../../components/input';
 import Label from '../../components/label';
+import { apiURL, imgAPI } from '../../config/config';
 import useOnChange from '../../hooks/useOnChange';
 
 Quill.register('modules/imageUploader', ImageUploader);
 
+const categoriesData = ['Architecture', 'Education'];
+
 const CampaignAddNew = () => {
   const [content, setContent] = useState('');
   const [countries, setCountries] = useState([]);
-  const { handleSubmit, control, setValue } = useForm();
+  const { handleSubmit, control, setValue, reset, watch } = useForm();
+  const getDropdownLabel = (name, defaultValue = '') => {
+    const value = watch(name) || defaultValue;
+    return value;
+  };
   const [filterCountry, setFilterCountry] = useOnChange(500);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+
+  const resetValues = () => {
+    setStartDate('');
+    setEndDate('');
+    reset({});
+  };
 
   useEffect(() => {
     async function fetchCountries() {
@@ -57,7 +75,7 @@ const CampaignAddNew = () => {
           bodyFormData.append('image', file);
           const response = await axios({
             method: 'post',
-            url: 'https://api.imgbb.com/1/upload?key=07d51728383b20e00c6f2b7b5e49683b',
+            url: imgAPI,
             data: bodyFormData,
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -74,7 +92,21 @@ const CampaignAddNew = () => {
     setValue(name, value);
   };
 
-  const handleAddNewCampaign = (values) => {};
+  const handleAddNewCampaign = async (values) => {
+    console.log(values);
+    try {
+      await axios.post(`${apiURL}/campaigns`, {
+        ...values,
+        content,
+        startDate,
+        endDate
+      });
+      toast.success('Create campaign successfully');
+      resetValues();
+    } catch (error) {
+      toast.error('Cannot create new campaign!');
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl py-10 px-[66px]">
@@ -96,15 +128,21 @@ const CampaignAddNew = () => {
           <FormGroup>
             <Label>Select a category*</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select the category" />
+              <Dropdown.Select
+                placeholder={getDropdownLabel('category', 'Select a category')}
+                className={getDropdownLabel('category') && '!text-text1'}
+              />
               <Dropdown.List>
-                <Dropdown.Option
-                  onClick={() =>
-                    handleSelectDropdownOption('category', 'architecture')
-                  }
-                >
-                  Architecture
-                </Dropdown.Option>
+                {categoriesData.map((category) => (
+                  <Dropdown.Option
+                    key={v4()}
+                    onClick={() =>
+                      handleSelectDropdownOption('category', category)
+                    }
+                  >
+                    {category}
+                  </Dropdown.Option>
+                ))}
               </Dropdown.List>
             </Dropdown>
           </FormGroup>
@@ -127,6 +165,16 @@ const CampaignAddNew = () => {
             onChange={setContent}
           />
         </FormGroup>
+        <FormRow>
+          <FormGroup>
+            <Label>Featured Image</Label>
+            <ImageUpload
+              onChange={setValue}
+              name="featured_image"
+            />
+          </FormGroup>
+          <FormGroup></FormGroup>
+        </FormRow>
         <FormRow>
           <FormGroup>
             <Label>Goal*</Label>
@@ -153,7 +201,7 @@ const CampaignAddNew = () => {
               name="prefilled"
               placeholder="Amount Prefilled"
             />
-            <p className="text-left text-sm text-text3 w-2/3">
+            <p className="w-2/3 text-sm text-left text-text3">
               It will help fill amount box by click, place each amount by comma,
               ex: 10, 20, 30, 40
             </p>
@@ -162,10 +210,10 @@ const CampaignAddNew = () => {
             <Label>Video</Label>
             <Input
               control={control}
-              name="amount"
+              name="video"
               placeholder="Video"
             />
-            <p className="text-left text-sm text-text3">
+            <p className="text-sm text-left text-text3">
               Place Youtube or Vimeo Video URL
             </p>
           </FormGroup>
@@ -181,7 +229,10 @@ const CampaignAddNew = () => {
           <FormGroup>
             <Label>Country</Label>
             <Dropdown>
-              <Dropdown.Select placeholder="Select country" />
+              <Dropdown.Select
+                placeholder={getDropdownLabel('country', 'Select country')}
+                className={getDropdownLabel('country') && '!text-text1'}
+              />
               <Dropdown.List>
                 <Dropdown.Search
                   placeholder="Search country"
@@ -208,25 +259,30 @@ const CampaignAddNew = () => {
         <FormRow>
           <FormGroup>
             <Label>Start Date</Label>
-            <Input
-              control={control}
-              name="start_date"
-              placeholder="Start Date"
+            <DatePicker
+              dateFormat="dd-MM-yyyy"
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              isClearable
+              placeholderText="Start Date"
             />
           </FormGroup>
           <FormGroup>
             <Label>End Date</Label>
-            <Input
-              control={control}
-              name="end_date"
-              placeholder="End Date"
+            <DatePicker
+              dateFormat="dd-MM-yyyy"
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              isClearable
+              placeholderText="End Date"
             />
           </FormGroup>
         </FormRow>
-        <div className="text-center mt-10">
+        <div className="mt-10 text-center">
           <Button
             kind="primary"
-            className="mx-auto px-10"
+            className="px-10 mx-auto"
+            type="submit"
           >
             Submit new campaign
           </Button>
