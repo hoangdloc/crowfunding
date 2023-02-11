@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
@@ -12,6 +13,7 @@ import { Input } from '../components/input';
 import Label from '../components/label';
 import useToggleValue from '../hooks/useToggleValue';
 import LayoutAuthentication from '../layouts/LayoutAuthentication';
+import { authRegister } from '../store/auth/auth-slice';
 
 const schema = yup.object({
   name: yup.string().required('This field is required!'),
@@ -26,6 +28,7 @@ const SignUpPage = () => {
   const {
     handleSubmit,
     control,
+    reset,
     formState: { isValid, isSubmitting, errors }
   } = useForm({
     mode: 'onSubmit',
@@ -35,10 +38,16 @@ const SignUpPage = () => {
     useToggleValue();
   const { value: showPassword, handleToggleValue: handleShowPassword } =
     useToggleValue();
+  const dispatch = useDispatch();
 
-  const handleSignUp = (values) => {
+  const handleSignUp = async (values) => {
     if (!isValid) return;
-    console.log(values);
+    try {
+      dispatch(authRegister(values));
+      reset({});
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
