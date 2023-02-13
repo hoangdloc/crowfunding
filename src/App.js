@@ -1,6 +1,10 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import Modal from 'react-modal';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
+
+import { authRefreshToken, authUpdateUser } from './store/auth/auth-slice';
+import { getToken, logOut } from './utils/auth';
 
 Modal.setAppElement('#root');
 
@@ -24,6 +28,23 @@ const WithdrawPage = lazy(async () => await import('./pages/WithdrawPage'));
 const PaymentPage = lazy(async () => await import('./pages/PaymentPage'));
 
 function App() {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user && user.id) {
+      const { access_token } = getToken();
+      dispatch(authUpdateUser({ user: user, access_token: access_token }));
+    } else {
+      const { refresh_token } = getToken();
+      if (refresh_token) dispatch(authRefreshToken(refresh_token));
+      else {
+        dispatch(authUpdateUser({}));
+        logOut();
+      }
+    }
+  }, [dispatch, user]);
+
   return (
     <Suspense fallback={<div className="p-5">Loading...</div>}>
       <Routes>
