@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
+import { permissions } from './constants/permission';
 import { authRefreshToken, authUpdateUser } from './store/auth/auth-slice';
 import { getToken, logOut } from './utils/auth';
 
@@ -26,6 +27,12 @@ const CheckoutPage = lazy(async () => await import('./pages/CheckoutPage'));
 const ShippingPage = lazy(async () => await import('./pages/ShippingPage'));
 const WithdrawPage = lazy(async () => await import('./pages/WithdrawPage'));
 const PaymentPage = lazy(async () => await import('./pages/PaymentPage'));
+const RequireAuthPage = lazy(
+  async () => await import('./pages/RequireAuthPage')
+);
+const UnauthorizePage = lazy(
+  async () => await import('./pages/UnauthorizePage')
+);
 
 function App() {
   const { user } = useSelector((state) => state.auth);
@@ -54,13 +61,25 @@ function App() {
             element={<DashboardPage />}
           />
           <Route
+            path="/unauthorize"
+            element={<UnauthorizePage />}
+          />
+          <Route
             path="/campaign"
             element={<CampaignPage />}
           />
           <Route
-            path="/start-campaign"
-            element={<StartCampaignPage />}
-          />
+            element={
+              <RequireAuthPage
+                allowPermissions={[permissions.camapaign.CREATE_CAMPAIGN]}
+              />
+            }
+          >
+            <Route
+              path="/start-campaign"
+              element={<StartCampaignPage />}
+            />
+          </Route>
           <Route
             path="/campaign/:slug"
             element={<CampaignView />}

@@ -29,7 +29,7 @@ const SignUpPage = () => {
     handleSubmit,
     control,
     reset,
-    formState: { isValid, isSubmitting, errors }
+    formState: { isValid, errors }
   } = useForm({
     mode: 'onSubmit',
     resolver: yupResolver(schema)
@@ -43,7 +43,7 @@ const SignUpPage = () => {
   const handleSignUp = async (values) => {
     if (!isValid) return;
     try {
-      dispatch(authRegister(values));
+      dispatch(authRegister({ ...values, permissions: [] }));
       reset({});
     } catch (error) {
       console.log(error);

@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as yup from 'yup';
 
 import { Button, ButtonGoogle } from '../components/button';
@@ -39,14 +39,6 @@ const SignInPage = () => {
     if (!isValid) return;
     dispatch(authLogin(values));
   };
-
-  const { user } = useSelector((state) => state.auth);
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (user && user.id) {
-      navigate('/');
-    }
-  }, [navigate, user]);
 
   return (
     <LayoutAuthentication heading="Welcome Back!">
